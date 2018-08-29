@@ -5,17 +5,22 @@ namespace Conduit.Infrastructure
 {
     public class ConduitContext : DbContext
     {
-        private readonly string _databaseName = Startup.DATABASE_FILE;
+        //private readonly string _databaseName = Startup.DATABASE_FILE;
 
-        public ConduitContext(DbContextOptions options) 
-            : base(options)
+        //public ConduitContext(DbContextOptions options) 
+        //    : base(options)
+        //{
+        //}
+
+        public ConduitContext(DbContextOptions<ConduitContext> options)
+        : base(options)
         {
         }
 
-        public ConduitContext(string databaseName)
-        {
-            _databaseName = databaseName;
-        }
+        //public ConduitContext(string databaseName)
+        //{
+        //    _databaseName = databaseName;
+        //}
 
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -25,10 +30,10 @@ namespace Conduit.Infrastructure
         public DbSet<ArticleFavorite> ArticleFavorites { get; set; }
         public DbSet<FollowedPeople> FollowedPeople { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite($"Filename={_databaseName}");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlite($"Filename={_databaseName}");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,7 +73,7 @@ namespace Conduit.Infrastructure
 
                 b.HasOne(pt => pt.Target)
                     .WithMany(t => t.Following)
-                    .HasForeignKey(pt => pt.TargetId);
+                    .HasForeignKey(pt => pt.TargetId).OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
